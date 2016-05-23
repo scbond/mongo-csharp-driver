@@ -218,12 +218,13 @@ namespace MongoDB.Driver.Core.Connections
                     _openedAtUtc = DateTime.UtcNow;
                     taskCompletionSource = new TaskCompletionSource<bool>();
                     _openTask = taskCompletionSource.Task;
+                    _openTask.IgnoreExceptions();
                     connecting = true;
                 }
             }
 
             if (connecting)
-            { 
+            {
                 try
                 {
                     OpenHelper(cancellationToken);
@@ -744,7 +745,7 @@ namespace MongoDB.Driver.Core.Connections
                 }
 
                 var handler = _connection._failedReceivingMessageEventHandler;
-                if (handler!= null)
+                if (handler != null)
                 {
                     handler(new ConnectionReceivingMessageFailedEvent(_connection.ConnectionId, _responseTo, exception, EventContext.OperationId));
                 }
